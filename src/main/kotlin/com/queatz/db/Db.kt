@@ -3,11 +3,11 @@ package com.queatz.db
 import com.arangodb.*
 import com.arangodb.entity.CollectionType
 import com.arangodb.entity.EdgeDefinition
-import com.arangodb.mapping.ArangoJack
 import com.arangodb.model.CollectionCreateOptions
 import com.arangodb.model.DocumentCreateOptions
 import com.arangodb.model.DocumentUpdateOptions
 import com.arangodb.model.PersistentIndexOptions
+import com.arangodb.serde.jackson.JacksonSerde
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -66,24 +66,25 @@ class DbModule : SimpleModule() {
 
 class Db(user: String, password: String, database: String) {
     private val db = ArangoDB.Builder()
+        .host("127.0.0.1", 8529)
         .user(user)
         .password(password)
-        .serializer(ArangoJack().apply {
+        .serde(JacksonSerde.of(ContentType.JSON).apply {
             configure {
-                it.registerModule(KotlinModule.Builder().build())
                 it.registerModule(DbModule())
+                it.registerModule(KotlinModule.Builder().build())
             }
         })
         .build()
-        .db(DbName.of(database))
+        .db(database)
         .setup()
 
     internal fun <T : Model> one(klass: KClass<T>, query: String, parameters: Map<String, Any?> = mapOf()) =
         synchronized(db) {
             db.query(
                 query,
-                if (query.contains("@@collection")) mutableMapOf("@collection" to klass.collection) + parameters else parameters,
-                klass.java
+                klass.java,
+                if (query.contains("@@collection")) mutableMapOf("@collection" to klass.collection) + parameters else parameters
             )
         }.stream().findFirst().takeIf { it.isPresent }?.get()
 
@@ -91,8 +92,8 @@ class Db(user: String, password: String, database: String) {
         synchronized(db) {
             db.query(
                 query,
-                if (query.contains("@@collection")) mutableMapOf("@collection" to klass.collection) + parameters else parameters,
-                klass.java
+                klass.java,
+                if (query.contains("@@collection")) mutableMapOf("@collection" to klass.collection) + parameters else parameters
             )
         }.asListRemaining().toList()
 
@@ -100,8 +101,8 @@ class Db(user: String, password: String, database: String) {
         synchronized(db) {
             db.query(
                 query,
-                parameters,
-                klass.java
+                klass.java,
+                parameters
             ).asListRemaining()
         }.toList()
 

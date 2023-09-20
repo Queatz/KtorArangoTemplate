@@ -2,11 +2,8 @@
 
 package com.queatz.db
 
-import com.arangodb.entity.From
-import com.arangodb.entity.Key
-import com.arangodb.entity.Rev
-import com.arangodb.entity.To
 import com.arangodb.internal.DocumentFields
+import com.arangodb.serde.jackson.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
