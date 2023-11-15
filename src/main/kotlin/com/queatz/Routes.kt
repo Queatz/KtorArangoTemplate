@@ -13,9 +13,7 @@ fun Application.routes() {
         get("/hi") {
             call.respond(mapOf("hi" to true))
         }
-        static("/static") {
-            resources("static")
-        }
+        staticResources("/static", null)
         meRoutes()
     }
 }
