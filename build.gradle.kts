@@ -3,9 +3,9 @@ val kotlin_version: String by project
 val logback_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.serialization") version "1.9.20"
-    id("io.ktor.plugin") version "2.3.4"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.21"
+    id("io.ktor.plugin") version "2.3.6"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -37,8 +37,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
-    implementation("com.arangodb:arangodb-java-driver:7.2.0")
-    implementation("com.arangodb:jackson-dataformat-velocypack:4.1.0")
+    implementation("com.arangodb:arangodb-java-driver:7.4.0")
+    implementation("com.arangodb:jackson-dataformat-velocypack:4.2.0")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
