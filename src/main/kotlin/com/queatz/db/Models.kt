@@ -25,30 +25,32 @@ data class Person(
  * Base model type. All models should extend this class.
  */
 @Serializable
-open class Model(
+open class Model {
     @Key
     @SerialName("id")
     @JsonNames(DocumentFields.KEY)
-    var id: String? = null,
+    var id: String? = null
+
     @Rev
     @SerialName("rev")
     @JsonNames(DocumentFields.REV)
-    var rev: String? = null,
-    var created: Instant? = null,
+    var rev: String? = null
+    var created: Instant? = null
     var updated: Instant? = null
-)
+}
 
 /**
  * Base edge type. All edges should extend this class.
  */
 @Serializable
-open class Edge(
+open class Edge : Model() {
     @From
     @SerialName("from")
     @JsonNames(DocumentFields.FROM)
     var from: String? = null,
+
     @To
     @SerialName("to")
     @JsonNames(DocumentFields.TO)
     var to: String? = null
-) : Model()
+}
